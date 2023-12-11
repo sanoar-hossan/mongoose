@@ -55,13 +55,13 @@ const {userId}=req.params
   const updateUser = async (req: Request, res: Response) => {
     try {
       const userData=req.body
-      const id = req.params.id;
+      const {userId }= req.params
       
   
   
      
         // Update user data
-        const result = await UserServices.updateUsersFromDB(id,userData);
+        const result = await UserServices.updateUsersFromDB(userId,userData);
   
         
   
@@ -82,8 +82,8 @@ const {userId}=req.params
 const deleteUser= async (req: Request, res: Response) => {
 
 try{
-const id=req.params.id
-const result= await UserServices.deleteUserFromDB(id)
+const {userId}=req.params
+const result= await UserServices.deleteUserFromDB(userId)
 
 res.status(200).json({
   success: true,

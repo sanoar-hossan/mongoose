@@ -27,7 +27,7 @@ const updateUsersFromDB = async(id:string,userData: User)=>{
 
   
     // Update user data
-    const result = await userModel.findByIdAndUpdate({_id:id},userData,{
+    const result = await userModel.findOneAndUpdate({userId:id},userData,{
       new:true,
       runValidators:true,
     });
@@ -39,7 +39,7 @@ const updateUsersFromDB = async(id:string,userData: User)=>{
   //delete user
   const deleteUserFromDB= async (id:string) => {
 
-   const result=await userModel.findByIdAndDelete({_id:id})
+   const result=await userModel.findOneAndDelete({userId:id})
    return result
   }
 
