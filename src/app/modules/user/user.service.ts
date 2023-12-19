@@ -1,4 +1,4 @@
-import { User } from "./user.interface";
+import { Order, User } from "./user.interface";
 import { userModel } from "./user.model";
 
 const createUserIntoDB= async (user:User)=>{
@@ -43,10 +43,59 @@ const updateUsersFromDB = async(id:string,userData: User)=>{
    return result
   }
 
+
+//OrderServices
+
+const addProductToOrder=async (id: string,orderData: Order) => {
+  const result = await userModel.findOne({ userId :id});
+  
+
+  if (result) {
+    if (result.orders) {
+      result.orders.push(orderData);
+    } else {
+      result.orders = [orderData];
+    }
+
+    await result.save(); 
+    return result;
+  } else {
+    throw new Error('User not found');
+  }
+
+};
+
+
+//get all order
+const getAllOrdersForUser = async (userId: string) => {
+  const result = await userModel.findOne({ userId: userId });
+  if (result) {
+    const orders = result.orders || [];
+    return orders;
+  }
+}
+
+//calculate price total
+const calculateTotalPriceForUser = async (userId: string) => {
+
+  const result= await userModel.findOne({ userId: userId });
+  if (result) {
+    const orders = result.orders || [];
+    const totalPrice = orders.reduce((acc, order) => acc + order.price * order.quantity, 0);
+    return totalPrice;
+  }
+}
+
+
+
+
 export const UserServices={
     createUserIntoDB,
     getAllUsersFromDB,
     getSingleUsersFromDB,
     updateUsersFromDB,
     deleteUserFromDB,
+    addProductToOrder,
+    getAllOrdersForUser,
+    calculateTotalPriceForUser ,
 }
